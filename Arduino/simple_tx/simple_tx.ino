@@ -16,6 +16,11 @@ const byte slaveAddress[6] = "00001" ;
 RF24 radio(CE_PIN, CSN_PIN); // Create a Radio
 
 float dataToSend = 123.456;
+float TempIdentifier = 0.0;
+float AcXIdentifier = 1.0;
+float AcYIdentifier = 2.0;
+float AxZIdentifier = 3.0;
+
 char txNum = '0';
 
 
@@ -68,7 +73,13 @@ void loop() {
 
     dataToSend = Tmp/340 + 36.25;
     send();
-    delay(1000);
+    dataToSend = AcX;
+    send();
+    dataToSend = AcY;
+    send();
+    dataToSend = AcZ;
+    send();
+    delay(10);
     Serial.print("Tmp: ");
     Serial.print(Tmp);
     Serial.println(); 
@@ -78,6 +89,60 @@ void loop() {
 //====================
 
 void send() {
+
+    bool rslt;
+    rslt = radio.write( &dataToSend, sizeof(dataToSend) );
+        // Always use sizeof() as it gives the size as the number of bytes.
+        // For example if dataToSend was an int sizeof() would correctly return 2
+
+    Serial.print("Data Sent ");
+    Serial.print(dataToSend);
+    if (rslt) {
+        Serial.println("  Acknowledge received");
+      //  updateMessage();
+    }
+    else {
+        Serial.println("  Tx failed");
+    }
+}
+
+void sendTemp() {
+
+    bool rslt;
+    rslt = radio.write( &dataToSend, sizeof(dataToSend) );
+        // Always use sizeof() as it gives the size as the number of bytes.
+        // For example if dataToSend was an int sizeof() would correctly return 2
+
+    Serial.print("Data Sent ");
+    Serial.print(dataToSend);
+    if (rslt) {
+        Serial.println("  Acknowledge received");
+      //  updateMessage();
+    }
+    else {
+        Serial.println("  Tx failed");
+    }
+}
+
+void sendAccel() {
+
+    bool rslt;
+    rslt = radio.write( &dataToSend, sizeof(dataToSend) );
+        // Always use sizeof() as it gives the size as the number of bytes.
+        // For example if dataToSend was an int sizeof() would correctly return 2
+
+    Serial.print("Data Sent ");
+    Serial.print(dataToSend);
+    if (rslt) {
+        Serial.println("  Acknowledge received");
+      //  updateMessage();
+    }
+    else {
+        Serial.println("  Tx failed");
+    }
+}
+
+void sendGyro() {
 
     bool rslt;
     rslt = radio.write( &dataToSend, sizeof(dataToSend) );
