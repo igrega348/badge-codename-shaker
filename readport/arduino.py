@@ -17,3 +17,4 @@ class Arduino():
                 file.write(data)
                 i += 1
         file.close()
+        self.ser.close()
