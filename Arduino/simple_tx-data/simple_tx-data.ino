@@ -6,6 +6,7 @@
 #include <nRF24L01.h>
 #include <RF24.h>
 #include<Wire.h>
+#include <stdlib.h>
 
 #define CE_PIN  9
 #define CSN_PIN 10
@@ -16,10 +17,21 @@ const byte slaveAddress[6] = "00001" ;
 RF24 radio(CE_PIN, CSN_PIN); // Create a Radio
 
 float dataToSend = 123.456;
-float TempIdentifier = 0.0;
-float AcXIdentifier = 1.0;
-float AcYIdentifier = 2.0;
-float AxZIdentifier = 3.0;
+const String tempIdent = "T";
+const String accxIdent = "X";
+const String accyIdent = "Y";
+const String acczIdent = "Z";
+const String gyrxIdent = "x";
+const String gyryIdent = "y";
+const String gyrzIdent = "z";
+const String soundIdent = "s";
+const String lastChar = "end";
+String numbers;
+String stringToSend1;
+String stringToSend2;
+char message1[32];
+char message2[32];
+
 
 char txNum = '0';
 
@@ -29,8 +41,10 @@ unsigned long prevMillis;
 unsigned long txIntervalMillis = 1000; // send once per second
 
 const int MPU=0x68; 
-float AcX,AcY,AcZ,Tmp,GyX,GyY,GyZ;
-float Sound;
+int AcX,AcY,AcZ,GyX,GyY,GyZ;
+int Tmp;
+String AccX, AccY, AccZ, Temp, GyrX, GyrY, GyrZ, Sound;
+int Snd;
 
 void setup() {
     
@@ -63,8 +77,8 @@ void loop() {
     GyX=Wire.read()<<8|Wire.read();  
     GyY=Wire.read()<<8|Wire.read();  
     GyZ=Wire.read()<<8|Wire.read();  
-    Sound = analogRead(A0);
-    Serial.println("trying");
+    Snd = analogRead(A0);
+   
     /*
     currentMillis = millis();
     if (currentMillis - prevMillis >= txIntervalMillis) {
@@ -73,10 +87,9 @@ void loop() {
     }
     */
 
-    dataToSend = Tmp/340 + 36.25;
-    send();
-    dataToSend = AcX;
-    send();
+    Tmp = Tmp/340 + 36.25;
+    sendAll();
+/*
     dataToSend = AcY;
     send();
     dataToSend = AcZ;
@@ -84,11 +97,13 @@ void loop() {
     dataToSend = Sound;
     send();
     delay(10);
+    */
     /*
-    Serial.print("Tmp: ");
-    Serial.print(Tmp);
+    Serial.print("GyY: ");
+    Serial.print(GyY);
     Serial.println(); 
     */
+    
 }
 
 //====================
@@ -96,6 +111,7 @@ void loop() {
 void send() {
 
     bool rslt;
+    
     rslt = radio.write( &dataToSend, sizeof(dataToSend) );
         // Always use sizeof() as it gives the size as the number of bytes.
         // For example if dataToSend was an int sizeof() would correctly return 2
@@ -111,40 +127,32 @@ void send() {
     }
 }
 
-void sendTemp() {
+
+
+void sendAll() {
 
     bool rslt;
-    rslt = radio.write( &dataToSend, sizeof(dataToSend) );
-        // Always use sizeof() as it gives the size as the number of bytes.
-        // For example if dataToSend was an int sizeof() would correctly return 2
+    AccX = String(AcX);
+    AccY = String(AcY);
+    AccZ = String(AcZ);
+    GyrX = String(GyX);
+    GyrY = String(GyY);
+    GyrZ = String(GyZ);
+    Temp = String(Tmp);
+    Sound = String(Snd);
+    stringToSend1 = tempIdent + Temp + accxIdent + AccX + accyIdent + AccY + acczIdent + AccZ + lastChar; 
+    stringToSend2 = gyrxIdent + GyrX + gyryIdent + GyrY + gyrzIdent + GyrZ + soundIdent + Sound + lastChar;
 
-    Serial.print("Data Sent ");
-    Serial.print(dataToSend);
-    if (rslt) {
-        Serial.println("  Acknowledge received");
-      //  updateMessage();
-    }
-    else {
-        Serial.println("  Tx failed");
-    }
-}
+    stringToSend1.toCharArray(message1, stringToSend1.length());
+    stringToSend2.toCharArray(message2, stringToSend2.length());
 
-void sendAccel() {
-
-    bool rslt;
-    rslt = radio.write( &dataToSend, sizeof(dataToSend) );
-        // Always use sizeof() as it gives the size as the number of bytes.
-        // For example if dataToSend was an int sizeof() would correctly return 2
-
-    Serial.print("Data Sent ");
-    Serial.print(dataToSend);
-    if (rslt) {
-        Serial.println("  Acknowledge received");
-      //  updateMessage();
-    }
-    else {
-        Serial.println("  Tx failed");
-    }
+    radio.write( &message1, sizeof(message1) );
+    radio.write( &message2, sizeof(message2));
+        
+//    Serial.print("Data Sent ");
+    Serial.println(message1);
+    Serial.println(message2);
+    
 }
 
 void sendGyro() {
