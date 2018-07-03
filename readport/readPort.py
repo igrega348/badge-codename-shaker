@@ -1,7 +1,7 @@
 from arduino import Arduino
 import numpy as np
 
-filename = 'output5.txt'
+filename = 'output6.txt'
 myArd = Arduino(filename)
 data = myArd.connect_arduino()
 
