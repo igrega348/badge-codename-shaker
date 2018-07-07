@@ -1,12 +1,13 @@
-from arduino-stream import Arduino
+from arduinoStream import Arduino
 from datetime import datetime
-from analyse-stream import loop, initialiseDict
+from analyseStream import loop, initialiseDict
 
 
 
 def initialise():
-    filename = 'log.txt'
+    """    filename = 'log.txt'
     file = open(filename, mode='w')
+    """
     myArd = Arduino()
     
 def run():
@@ -24,6 +25,7 @@ def run():
             myArd.closePort()
     
     
-        
+if __name__ == '__main__' :
+    run()
 
 
