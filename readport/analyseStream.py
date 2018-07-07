@@ -25,12 +25,6 @@ def initialiseDict():
     return dictIdent, dictVars
  
 
-
-#open a file for input
-file = open('output6.txt', mode='r')
-
-
-
 #function takes in one line of coded message
 #and returns dictionary of decoded variables    
 
@@ -42,15 +36,19 @@ def loop(line, dictIdent, dictVars):
     entries = []
     
     while endOfLine == False:     
+        
         #this try is valid until end of line    
         try:  
+            
             char = line[i]
+            
             #this try checks if the character is a number
             try:
                 #if it is a number, then increment the number of characters taken
                 n = int(char)
                 i += 1
             except ValueError:
+                
                 #if it's a minus sign, do the same thing
                 if char == '-':
                     pass
@@ -62,6 +60,7 @@ def loop(line, dictIdent, dictVars):
                 i += 1
         except IndexError:
             endOfLine = True
+   
     #now decode each entry according to the first character        
     for j in entries:
         try:

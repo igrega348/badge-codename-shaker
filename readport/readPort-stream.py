@@ -13,18 +13,26 @@ def initialise():
     
 def run():
     myArd = initialise()
+    dictIdent, dictVars = initialiseDict()
     a = datetime.now()
     b = datetime.now()
     dt = b - a
-    while dt.seconds < 20:    
+    while dt.seconds < 10:    
         try:
             b = datetime.now()
             dt = b-a
             data = myArd.readData()
-            print(data)
+            data = str(data, 'utf-8')
+            if data == None:
+                pass
+            else:
+                loop(data, dictIdent, dictVars)
+            
+#            print(data)
         except KeyboardInterrupt:
             myArd.closePort()
     myArd.closePort()
+    print(dictVars)
     
 if __name__ == "__main__" :
     run()
