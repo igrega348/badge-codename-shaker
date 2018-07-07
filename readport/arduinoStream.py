@@ -8,9 +8,11 @@ class Arduino():
        
 
     def readData(self):
-#        print("Trying to connect")
+        print("Trying to connect")
         if self.ser.inWaiting() > 0:
             data = self.ser.read()
+        else:
+            data = None
         return data   
     
     def closePort(self):

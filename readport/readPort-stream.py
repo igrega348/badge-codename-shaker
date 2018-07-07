@@ -5,13 +5,14 @@ from analyseStream import loop, initialiseDict
 
 
 def initialise():
-    """    filename = 'log.txt'
-    file = open(filename, mode='w')
-    """
+#    filename = 'log.txt'
+#    file = open(filename, mode='w')
+   
     myArd = Arduino()
+    return myArd
     
 def run():
-    initialise()
+    myArd = initialise()
     a = datetime.now()
     b = datetime.now()
     dt = b - a
@@ -23,9 +24,9 @@ def run():
             print(data)
         except KeyboardInterrupt:
             myArd.closePort()
+    myArd.closePort()
     
-    
-if __name__ == '__main__' :
+if __name__ == "__main__" :
     run()
 
 
