@@ -2,7 +2,8 @@ import serial
 
 class Arduino():
     def __init__(self):
-        self.ser = serial.Serial('/dev/ttyACM0', 9600)
+#        self.ser = serial.Serial('/dev/ttyACM0', 9600)
+        self.ser = serial.Serial('COM6', 9600)
         self.ser.flushInput()
 #        self.connect_arduino()
        

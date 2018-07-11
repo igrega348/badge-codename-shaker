@@ -1,4 +1,5 @@
 import serial
+from datetime import datetime
 
 class Arduino():
     def __init__(self, filename):
@@ -10,11 +11,17 @@ class Arduino():
     def connect_arduino(self):
         print("Trying to connect")
         file = open(self.filename,mode='wb')
-        i = 0
-        while i<=10000:
-            if self.ser.inWaiting() > 0:
-                data = self.ser.read()
-                file.write(data)
-                i += 1
+        a = datetime.now()
+        b = datetime.now()
+        dt = b-a
+        while dt.seconds <= 10:
+#            if self.ser.inWaiting() > 0:
+#                data = self.ser.read()
+#                file.write(data)
+#
+            data = self.ser.read()
+            file.write(data)
+            b = datetime.now()
+            dt = b-a
         file.close()
         self.ser.close()

@@ -11,12 +11,12 @@
 #define CE_PIN  9
 #define CSN_PIN 10
 
-const byte slaveAddress[6] = "00001" ;
+const byte slaveAddress[6] = "11001" ;
 
 
 RF24 radio(CE_PIN, CSN_PIN); // Create a Radio
 
-float dataToSend = 123.456;
+
 const String tempIdent = "T";
 const String accxIdent = "X";
 const String accyIdent = "Y";
@@ -53,8 +53,9 @@ void setup() {
     Serial.println("SimpleTx Starting");
 
     radio.begin();
-    radio.setDataRate( RF24_250KBPS );
-    radio.setRetries(3,5); // delay, count
+//    radio.setDataRate( RF24_250KBPS );
+    radio.setPALevel(RF24_PA_MIN);
+//    radio.setRetries(3,5); // delay, count
     radio.openWritingPipe(slaveAddress);
     Wire.begin();
     Wire.beginTransmission(MPU);
@@ -107,7 +108,7 @@ void loop() {
 }
 
 //====================
-
+/*
 void send() {
 
     bool rslt;
@@ -127,6 +128,7 @@ void send() {
     }
 }
 
+*/
 
 
 void sendAll() {
@@ -155,34 +157,4 @@ void sendAll() {
     
 }
 
-void sendGyro() {
-
-    bool rslt;
-    rslt = radio.write( &dataToSend, sizeof(dataToSend) );
-        // Always use sizeof() as it gives the size as the number of bytes.
-        // For example if dataToSend was an int sizeof() would correctly return 2
-
-    Serial.print("Data Sent ");
-    Serial.print(dataToSend);
-    if (rslt) {
-        Serial.println("  Acknowledge received");
-      //  updateMessage();
-    }
-    else {
-        Serial.println("  Tx failed");
-    }
-}
-
-//================
-/*
-void updateMessage() {
-        // so you can see that new data is being sent
-    txNum += 1;
-    if (txNum > '9') {
-        txNum = '0';
-    }
-    dataToSend[8] = txNum;
-}
-
-*/
 

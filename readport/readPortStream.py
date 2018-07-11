@@ -1,8 +1,8 @@
 from arduinoStream import Arduino
 from datetime import datetime
-from analyseStream import loop, initialiseDict
+from analyseStream import loopScreen, initialiseDict
 
-
+import numpy as np
 
 def initialise():
 #    filename = 'log.txt'
@@ -11,8 +11,8 @@ def initialise():
     myArd = Arduino()
     return myArd
     
-def run():
-    myArd = initialise()
+def screen(arduino):
+    myArd = arduino
     dictIdent, dictVars = initialiseDict()
     a = datetime.now()
     b = datetime.now()
@@ -22,19 +22,28 @@ def run():
             b = datetime.now()
             dt = b-a
             data = myArd.readData()
-            data = str(data, 'utf-8')
+#            data = str(data, 'utf-8')
             if data == None:
                 pass
             else:
-                loop(data, dictIdent, dictVars)
+                data = str(data, 'utf-8')
+                loopScreen(data, dictIdent, dictVars)
             
 #            print(data)
         except KeyboardInterrupt:
             myArd.closePort()
-    myArd.closePort()
-    print(dictVars)
+            print(dictVars)
+        except:
+            myArd.closePort()
+
+    for key in dictVars:
+        dictVars[key] = np.array(dictVars[key], dtype = int)
+    
+#    print(dictVars)
+    return dictVars
+
     
 if __name__ == "__main__" :
-    run()
+    screen()
 
 
