@@ -28,9 +28,9 @@ def fitHarmonic(iptData):
 #    diff = abs(rand[0] - rand[1])
     
 #    xarray = range(len(iptData))
-    # now get limits as the mean +- 5 times standard deviation
-    low = (mid - 6*sigma)
-    high = (mid + 6*sigma)
+    # now get limits as the mean +- 10 times standard deviation
+    low = (mid - 10*sigma)
+    high = (mid + 10*sigma)
     
     lowArr = np.ones(len(iptData)) * low
     highArr = np.ones(len(iptData))* high
@@ -53,4 +53,12 @@ def fitHarmonic(iptData):
     return low, high
 
 
+def getImage(iptData, name):
+    fig = plt.figure()
+    ax = fig.gca()
     
+    ax.plot(iptData, label = name)
+    ax.legend()
+    
+    plt.savefig(fname = 'pictures/{}.png'.format(name), dpi = 300, format = 'png')
+    plt.close('all')

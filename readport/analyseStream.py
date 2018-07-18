@@ -27,7 +27,7 @@ def initialiseDict():
 #function takes in one line of coded message
 #and returns dictionary of decoded variables    
 #This function doesn't append data to dictVars, because we don't need it for continuous loop
-def loop(line, dictIdent):
+def loop(line, dictIdent, dictVars):
     
     endOfLine = False
     prev = 0
@@ -69,7 +69,7 @@ def loop(line, dictIdent):
             if j[0] in dictIdent:
                 var = dictIdent[j[0]]
                 try:
-#                    dictVars[var].append(int(j[1:]))
+                    dictVars[var].append(int(j[1:]))
                     newReadings[var] = int(j[1:])
                 #if conversion to integer fails, then pass    
                 except:
